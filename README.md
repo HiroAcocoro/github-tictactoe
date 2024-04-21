@@ -1,2 +1,18 @@
-# github-tictactoe
-online tictactoe using github readme
+# GITHUB IS A GAME ENGINE
+
+### PR a new move inside moves.js
+
+### ToDo
+- Github actions to set and render your moves
+- Move validations
+- Win game scenario
+
+
+#CURRENT GAME:
+
+
+||a|b|c|
+|---|---|---|---|
+|1|⭕|⬛|⬛|
+|2|⬛|❌|⬛|
+|3|⬛|⬛|⭕|
