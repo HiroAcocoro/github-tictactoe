@@ -30,6 +30,7 @@ const renderMoves = () => {
 		renderBoard = boardArr.join("");
 		isCircle = !isCircle;
 	});
+  console.log(renderBoard);
 	fs.writeFileSync("README.md", mainMessage + renderBoard, "utf8");
 };
 
