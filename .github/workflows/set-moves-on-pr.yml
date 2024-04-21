@@ -1,0 +1,16 @@
+name: Set Move on PR
+
+on: pull_request
+
+jobs:
+  automate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run game engine
+        run: node ./engine.js
+      - name: Commit and push changes
+        run: |
+          git add .
+          git commit -m "Automated: set and render move"
+          git push
