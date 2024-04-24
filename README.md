@@ -3,7 +3,7 @@
 ### PR a new move inside main.go > moves
 
 ### ToDo
-- ✅ Github actions to set and render your moves
+- Github actions to set and render your moves
 - Move validations
 - Win game scenario
 
@@ -14,5 +14,5 @@
 ||a|b|c|
 |---|---|---|---|
 |1|❌|⭕|⭕|
-|2|⬛|❌|⬛|
+|2|❌|❌|⬛|
 |3|⬛|⭕|⬛|
