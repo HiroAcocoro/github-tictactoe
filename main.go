@@ -17,11 +17,16 @@ func letterToNum(value string) int {
 }
 
 func main() {
+	// constants
+	var moves = [...]string{"c1", "a1", "b3", "b2"}
+	var emptyBoard string = "||a|b|c|\n|---|---|---|---|\n|1|⬛|⬛|⬛|\n|2|⬛|⬛|⬛|\n|3|⬛|⬛|⬛|"
+	var templateMsg string = "# GITHUB IS A GAME ENGINE\n\n### PR a new move inside moves.go > Moves\n\n### ToDo\n- Github actions to set and render your moves\n- Move validations\n- Win game scenario\n\n\n# CURRENT GAME:\n\n\n"
+
 	// 27 is the start of the Board
-	var renderBoard string = EmptyBoard
+	var renderBoard string = emptyBoard
 	var isCircle bool = true
 
-	for _, move := range Moves {
+	for _, move := range moves {
 		var boardArr = strings.Split(renderBoard, "")
 		var movePiece string
 		if isCircle {
@@ -44,10 +49,10 @@ func main() {
 		isCircle = !isCircle
 		renderBoard = strings.Join(boardArr, "")
 	}
-  
-  updatedReadme  := []byte(TemplateMsg + renderBoard)
-  err := ioutil.WriteFile("README.md", updatedReadme, 0644)
-  if err != nil {
-    fmt.Println("Failed to write : %v", err)
-  }
+
+	updatedReadme := []byte(templateMsg + renderBoard)
+	err := ioutil.WriteFile("README.md", updatedReadme, 0644)
+	if err != nil {
+		fmt.Println("Failed to write : %v", err)
+	}
 }
