@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -50,8 +50,8 @@ func main() {
 		renderBoard = strings.Join(boardArr, "")
 	}
 
-	updatedReadme := []byte(templateMsg + renderBoard)
-	err := ioutil.WriteFile("README.md", updatedReadme, 0644)
+	updatedReadme := []byte(TemplateMsg + renderBoard)
+	err := os.WriteFile("README.md", updatedReadme, 0644)
 	if err != nil {
 		fmt.Println("Failed to write : %v", err)
 	}
