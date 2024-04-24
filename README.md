@@ -1,6 +1,6 @@
 # GITHUB IS A GAME ENGINE
 
-### PR a new move inside moves.go > Moves
+### PR a new move inside main.go > moves
 
 ### ToDo
 - Github actions to set and render your moves
@@ -13,6 +13,6 @@
 
 ||a|b|c|
 |---|---|---|---|
-|1|❌|⬛|⭕|
+|1|❌|⭕|⭕|
 |2|⬛|❌|⬛|
 |3|⬛|⭕|⬛|
