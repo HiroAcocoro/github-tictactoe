@@ -16,12 +16,27 @@ func letterToNum(value string) int {
 	return letterMap[strings.ToLower(value)]
 }
 
+func hasNoDuplicate(moves []string) bool {
+	occured := make(map[string]bool)
+	for _, move := range moves {
+		if occured[move] {
+			return false
+		}
+		occured[move] = true
+	}
+	return true
+}
+
 func main() {
+	var moves = [...]string{"c1", "a1", "b3", "b2", "c1"}
 	// constants
-	var moves = [...]string{"c1", "a1", "b3", "b2", "b1"}
 	var emptyBoard string = "||a|b|c|\n|---|---|---|---|\n|1|⬛|⬛|⬛|\n|2|⬛|⬛|⬛|\n|3|⬛|⬛|⬛|"
 	var templateMsg string = "# GITHUB IS A GAME ENGINE\n\n### PR a new move inside main.go > moves\n\n### ToDo\n- Github actions to set and render your moves\n- Move validations\n- Win game scenario\n\n\n# CURRENT GAME:\n\n\n"
+	var isMovesValid bool = false
 
+	isMovesValid = hasNoDuplicate(moves[:])
+
+	fmt.Println(isMovesValid)
 	// 27 is the start of the Board
 	var renderBoard string = emptyBoard
 	var isCircle bool = true
