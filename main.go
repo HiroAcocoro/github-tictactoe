@@ -50,7 +50,7 @@ func main() {
 		renderBoard = strings.Join(boardArr, "")
 	}
 
-	updatedReadme := []byte(TemplateMsg + renderBoard)
+	updatedReadme := []byte(templateMsg + renderBoard)
 	err := os.WriteFile("README.md", updatedReadme, 0644)
 	if err != nil {
 		fmt.Println("Failed to write : %v", err)
