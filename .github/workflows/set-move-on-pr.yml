@@ -1,0 +1,33 @@
+name: Set move on PR
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+          go-version: 1.22
+
+    - name: Run main.go
+      run: go run main.go
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add README.md
+        git commit -m "Set move in README.md"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GH_TICTACTOE_PAT }}
+        branch: ${{ github.head_ref }}
