@@ -40,18 +40,120 @@ func hasInvalidMove(moves []string) bool {
 	return false
 }
 
+func getPlayerMove(moves []string, currMove string) ([]string, *string) {
+	for index, move := range moves {
+		if strings.Contains(move[0:2], currMove) {
+			playerMove := move[2:]
+			return append(moves[:index], moves[index+0:]...), &playerMove
+		}
+	}
+	return moves, nil
+}
+
+func getStraightLine(currMoves []string, isVert bool) bool {
+	var gridSize = 3
+	var localMoves = currMoves
+	for ix := 1; ix <= gridSize; ix++ {
+		countMatch := 0
+		currPlayer := ""
+		// checking a->y
+		for iy := 1; iy <= gridSize; iy++ {
+			currCheck := strconv.Itoa(ix) + strconv.Itoa(iy)
+			if !isVert {
+				currCheck = strconv.Itoa(iy) + strconv.Itoa(ix)
+			}
+			moves, lastMovePointer := getPlayerMove(localMoves, currCheck)
+
+			if lastMovePointer == nil {
+				// this means line has a blank, can safely break from here
+				break
+			}
+
+			lastMove := *lastMovePointer
+			if currPlayer == "" {
+				currPlayer = lastMove
+			}
+			if currPlayer != lastMove {
+				// this means line is broken
+				break
+			}
+			if currPlayer == lastMove {
+				countMatch++
+				localMoves = moves
+			}
+			if countMatch == gridSize {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func getDiagonal(currMoves []string, isLeft bool) bool {
+	gridSize := 3
+	localMoves := currMoves
+
+	countMatch := 0
+	currPlayer := ""
+	for i := 1; i <= gridSize; i++ {
+		currCheck := strconv.Itoa(i) + strconv.Itoa(i)
+		if !isLeft {
+			currCheck = strconv.Itoa(i) + strconv.Itoa(gridSize+1-i)
+		}
+		moves, lastMovePointer := getPlayerMove(localMoves, currCheck)
+
+		if lastMovePointer == nil {
+			// this means line has a blank, can safely break from here
+			break
+		}
+
+		lastMove := *lastMovePointer
+		if currPlayer == "" {
+			currPlayer = lastMove
+		}
+		if currPlayer != lastMove {
+			// this means line is broken
+			break
+		}
+		if currPlayer == lastMove {
+			countMatch++
+			localMoves = moves
+		}
+		if countMatch == gridSize {
+			return true
+		}
+	}
+	return false
+}
+
+func isGameOver(currMoves []string) bool {
+	for i := 0; i < 2; i++ {
+		if getStraightLine(currMoves, i == 0) {
+			return true
+		}
+		if getDiagonal(currMoves, i == 0) {
+			return true
+		}
+	}
+	return false
+}
+
 func main() {
-	var moves = [...]string{"c1", "a1", "b3", "b2", "c2"}
+	var moves = [...]string{"b2", "a1", "c1", "b3", "a3"}
 	// constants
 	var emptyBoard string = "||a|b|c|\n|---|---|---|---|\n|1|⬛|⬛|⬛|\n|2|⬛|⬛|⬛|\n|3|⬛|⬛|⬛|"
-	var templateMsg string = "# GITHUB IS A GAME ENGINE\n\n### PR a new move inside main.go > moves\n\n### ToDo\n- Github actions to set and render your moves\n- Move validations\n- Win game scenario\n\n\n# CURRENT GAME:\n\n\n"
+  var headerMsg string = "# GITHUB IS A GAME ENGINE\n\n"
+	var templateMsg string = "### PR a new move inside main.go > moves\n# CURRENT GAME:\n\n"
+	var gameOverMsg string = "## GAME OVER!\n\n"
   var isMovesValid bool = !hasInvalidMove(moves[:])
+  isGameWon := false
 
 	if isMovesValid {
 		// 26 is the start of the Board
 		var renderBoard string = emptyBoard
 		var isCircle bool = true
 		var boardArr = strings.Split(renderBoard, "")
+		var currMoves = []string{}
 
 		for _, move := range moves {
 			var movePiece string
@@ -62,27 +164,39 @@ func main() {
 			}
 
 			// abc notations
-			var xAxis = letterToNum(move[0:1])*2 + 1
+			var xRaw = letterToNum(move[0:1])
+			var xAxis = xRaw*2 + 1
 			// 122 notations
-			yAxis, err := strconv.Atoi(move[1:])
+			yRaw, err := strconv.Atoi(move[1:])
 			if err != nil {
 				fmt.Println("Error converting string to integer:", err)
 				return
 			}
-			yAxis = yAxis * 10
+			var yAxis = yRaw * 10
 
 			boardArr[xAxis+yAxis+17] = movePiece
+			var currMove = strconv.Itoa(xRaw) + strconv.Itoa(yRaw) + strconv.FormatBool(isCircle)
+			currMoves = append(currMoves, currMove)
+			if isGameOver(currMoves) {
+        isGameWon = true
+				break
+			}
 			isCircle = !isCircle
 		}
 
 		renderBoard = strings.Join(boardArr, "")
-		updatedReadme := []byte(templateMsg + renderBoard)
+		updatedReadme := []byte("")
+    if isGameWon {
+      updatedReadme = []byte(headerMsg + gameOverMsg + templateMsg + renderBoard)
+    } else {
+      updatedReadme = []byte(headerMsg + templateMsg + renderBoard)
+    }
 		err := os.WriteFile("README.md", updatedReadme, 0643)
 		if err != nil {
 			fmt.Println("Failed to write : %v", err)
 		}
 	} else {
 		// @TODO invalid move
-    fmt.Println("Invalid Move")
+		fmt.Println("Invalid Move")
 	}
 }
