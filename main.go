@@ -139,7 +139,7 @@ func isGameOver(currMoves []string) bool {
 }
 
 func main() {
-	var moves = [...]string{"b2", "a1", "c1", "b3", "a3"}
+	var moves = [...]string{"b2", "a1", "a2", "b3", "c3"}
 	// constants
 	var emptyBoard string = "||a|b|c|\n|---|---|---|---|\n|1|⬛|⬛|⬛|\n|2|⬛|⬛|⬛|\n|3|⬛|⬛|⬛|"
   var headerMsg string = "# GITHUB IS A GAME ENGINE\n\n"
